@@ -1,3 +1,181 @@
+### v2.14.1 (2015-08-20):
+
+#### BETTER WINDOWS INTEGRATION, ONE STEP AT A TIME
+
+* [`e40e71f`](https://github.com/npm/npm/commit/e40e71f2f838a8a42392f44e3eeec04e323ab743)
+  [#6412](https://github.com/npm/npm/issues/6412) Improve the search strategy
+  used by the npm shims for Windows to prioritize your own local npm installs.
+  npm has really needed this tweak for a long time, so hammer on it and let us
+  know if you run into issues, but with luck it will Just Work.
+  ([@joaocgreis](https://github.com/joaocgreis))
+* [`204ebbb`](https://github.com/npm/npm/commit/204ebbb3e0cab696a429a878ceeb4a7e78ec2b94)
+  [#8751](https://github.com/npm/npm/issues/8751)
+  [#7333](https://github.com/npm/npm/issues/7333) Keep [autorun
+  scripts](https://technet.microsoft.com/en-us/sysinternals/bb963902.aspx) from
+  interfering with npm package and lifecycle script execution on Windows by
+  adding `/d` and `/s` when invoking `cmd.exe`.
+  ([@saper](https://github.com/saper))
+
+#### IT SEEMED LIKE AN IDEA AT THE TIME
+
+* [`286f3d9`](https://github.com/npm/npm/commit/286f3d97103812f0fd84b70352addbe899e258f9)
+  [#9201](https://github.com/npm/npm/pull/9201) For a while npm was building
+  HTML partials for use on [`docs.npmjs.com`](https://docs.npmjs.com), but we
+  weren't actually using them. Stop building them, which makes running the full
+  test suite and installation process around a third faster.
+  ([@isaacs](https://github.com/isaacs))
+
+#### LESS CRUFTY ENVIRONMENTS
+
+* [`b9474a8`](https://github.com/npm/npm/commit/b9474a843ca55b7c5fac6da33989e8eb39aff8b1)
+  `fstream-npm@1.0.5`: Stop publishing build cruft (`config.gypi`) and per-project
+  `.npmrc` files to keep local configuration out of published packages.
+  ([@othiym23](https://github.com/othiym23))
+* [`13c286d`](https://github.com/npm/npm/commit/13c286dbdc3fa8fec4cb79fc4d1ee505c8a41b2e)
+  [#9348](https://github.com/npm/npm/issues/9348) Filter "private"
+  (underscore-prefixed, even when scoped to a registry) configuration values
+  out of child environments. ([@othiym23](https://github.com/othiym23))
+
+#### A SINGLE LONELY DEPENDENCY UPGRADE
+
+* [`b343b95`](https://github.com/npm/npm/commit/b343b956ef777e321e4251ddc96ec6d80827d9e2)
+  `request@2.61.0`: Bug fixes and keep-alive tweaks.
+  ([@simov](https://github.com/simov))
+
+### v2.14.0 (2015-08-13):
+
+#### IT'S HERE! KINDA!
+
+This release adds support for teens and orcs (err, teams and organizations) to
+the npm CLI! Note that the web site and registry-side features of this are
+still not ready for public consumption.
+
+A beta should be starting in the next couple of weeks, and the features
+themselves will become public once all that's done. Keep an eye out for more
+news!
+
+All of these changes were done under [`#9011`](https://github.com/npm/npm/pull/9011):
+
+* [`6424170`](https://github.com/npm/npm/commit/6424170fc17c666a6efc090370ec691e0cab1792)
+  Added new `npm team` command and subcommands.
+  ([@zkat](https://github.com/zkat))
+* [`52220d1`](https://github.com/npm/npm/commit/52220d146d474ec29b683bd99c06f75cbd46a9f4)
+  Added documentation for new `npm team` command.
+  ([@zkat](https://github.com/zkat))
+* [`4e66830`](https://github.com/npm/npm/commit/4e668304850d02df8eb27a779fda76fe5de645e7)
+  Updated `npm access` to support teams and organizations.
+  ([@zkat](https://github.com/zkat))
+* [`ea3eb87`](https://github.com/npm/npm/commit/ea3eb8733d9fa09ce34106b1b19fb1a8f95844a5)
+  Gussied up docs for `npm access` with new commands.
+  ([@zkat](https://github.com/zkat))
+* [`6e0b431`](https://github.com/npm/npm/commit/6e0b431c1de5e329c86e57d097aa88ebfedea864)
+  Fix up `npm whoami` to make the underlying API usable elsewhere.
+  ([@zkat](https://github.com/zkat))
+* [`f29c931`](https://github.com/npm/npm/commit/f29c931012ce5ccd69c29d83548f27e443bf7e62)
+  `npm-registry-client@7.0.1`: Upgrade `npm-registry-client` API to support
+  `team` and `access` calls against the registry.
+  ([@zkat](https://github.com/zkat))
+
+#### A FEW EXTRA VERSION BUMPS
+
+* [`c977e12`](https://github.com/npm/npm/commit/c977e12cbfa50c2f52fc807f5cc19ba1cc1b39bf)
+  `init-package-json@1.8.0`: Checks for some `npm@3` metadata.
+  ([@iarna](https://github.com/iarna))
+* [`5c8c9e5`](https://github.com/npm/npm/commit/5c8c9e5ae177ba7d0d298cfa42f3fc7f0271e4ec)
+  `columnify@1.5.2`: Updated some dependencies.
+  ([@timoxley](https://github.com/timoxley))
+* [`5d56742`](https://github.com/npm/npm/commit/5d567425768b75aeab402c817a53d8b2bc60d8de)
+  `chownr@1.0.1`: Tests, docs, and minor style nits.
+  ([@isaacs](https://github.com/isaacs))
+
+#### ALSO A DOC FIX
+
+* [`846fcc7`](https://github.com/npm/npm/commit/846fcc79b86984b109a97366b0422f995a45f8bf)
+  [`#9200`](https://github.com/npm/npm/pull/9200) Remove single quotes
+  around semver range, thus making it valid semver.
+  ([@KenanY](https://github.com/KenanY))
+
+### v2.13.5 (2015-08-07):
+
+This is another quiet week for the `npm@2` release.
+[@zkat](https://github.com/zkat) has been working hard on polishing the CLI
+bits of the registry's new feature to support direct management of teams and
+organizations, and [@iarna](https://github.com/iarna) continues to work through
+the list of issues blocking the general release of `npm@3`, which is looking
+more and more solid all the time.
+
+[@othiym23](https://github.com/othiym23) and [@zkat](https://github.com/zkat)
+have also been at this week's Node.js / io.js [collaborator
+summit](https://github.com/nodejs/summit/tree/master), both as facilitators and
+participants. This is a valuable opportunity to get some face time with other
+contributors and to work through a bunch of important discussions, but it does
+leave us feeling kind of sleepy. Running meetings is hard!
+
+What does that leave for this release? A few of the more tricky bug fixes that
+have been sitting around for a little while now, and a couple dependency
+upgrades. Nothing too fancy, but most of these were contributed by developers
+like _you_, which we think is swell. Thanks!
+
+#### BUG FIXES
+
+* [`d7271b8`](https://github.com/npm/npm/commit/d7271b8226712479cdd339bf85faf7e394923e0d)
+  [#4530](https://github.com/npm/npm/issues/4530) The bash completion script
+  for npm no longer alters global completion behavior around word breaks.
+  ([@whitty](https://github.com/whitty))
+* [`c9ce294`](https://github.com/npm/npm/commit/c9ce29415a0a8fc610690b6e9d91b64d6e36cfcc)
+  [#7198](https://github.com/npm/npm/issues/7198) When setting up dependencies
+  to be shared via `npm link <package>`, only run the lifecycle scripts during
+  the original link, not when running `npm link <package>` or `npm install
+  --link` against them. ([@murgatroid99](https://github.com/murgatroid99))
+* [`422da66`](https://github.com/npm/npm/commit/422da664bd3ce71313da447f170507faf5aac46a)
+  [#9108](https://github.com/npm/npm/issues/9108) Clear up minor confusion
+  around wording in `bundledDependencies` section of `package.json` docs.
+  ([@derekpeterson](https://github.com/derekpeterson))
+* [`6b42d99`](https://github.com/npm/npm/commit/6b42d99460885e715772d3487b1c548d2bc8a738)
+  [#9146](https://github.com/npm/npm/issues/9146) Include scripts that run for
+  `preversion`, `version`, and `postversion` in the section for lifecycle
+  scripts rather than the generic `npm run-script` output.
+  ([@othiym23](https://github.com/othiym23))
+
+#### NOPE, NOT DONE WITH DEPENDENCY UPDATES
+
+* [`91a48bb`](https://github.com/npm/npm/commit/91a48bb5ef5a990781c86f8b69b8a32cf4fac2d9)
+  `chmodr@1.0.1`: Ignore symbolic links when recursively changing mode, just
+  like the Unix command. ([@isaacs](https://github.com/isaacs))
+* [`4bbc86e`](https://github.com/npm/npm/commit/4bbc86e3825e2eee9a8758ba26bdea0cb6a2581e)
+  `nock@2.10.0` ([@pgte](https://github.com/pgte))
+
+### v2.13.4 (2015-07-30):
+
+#### JULY ENDS ON A FAIRLY QUIET NOTE
+
+Hey everyone! I hope you've had a great week. We're having a fairly small
+release this week while we wrap up Teams and Orgs (or, as we've taken to calling
+it internally, _Teens and Orcs_).
+
+In other exciting news, a bunch of us are gonna be at the [Node.js Collaborator
+Summit](https://github.com/nodejs/summit/issues/1), and you can also find us at
+[wafflejs](https://wafflejs.com/) on Wednesday. Hopefully we'll be seeing some
+of you there. :)
+
+#### THE PATCH!!!
+
+So here it is. The patch. Hope it helps. (Thanks,
+[@ktarplee](https://github.com/ktarplee)!)
+
+* [`2e58c48`](https://github.com/npm/npm/commit/2e58c4819e3cafe4ae23ab7f4a520fe09258cfd7)
+  [#9033](https://github.com/npm/npm/pull/9033) `npm version` now works on git
+  submodules
+  ([@ktarplee](https://github.com/ktarplee))
+
+#### OH AND THERE'S A DEV DEPENDENCIES UPDATE
+
+Hooray.
+
+* [`d204683`](https://github.com/npm/npm/commit/d2046839d471322e61e3ceb0f00e78e5c481f967)
+  nock@2.9.1
+  ([@pgte](https://github.com/pgte))
+
 ### v2.13.3 (2015-07-23):
 
 #### I'M SAVING THE GOOD JOKES FOR MORE INTERESTING RELEASES
@@ -29,12 +207,10 @@ There's a couple of doc updates! The last one might be interesting.
   settings.
   ([@SimenB](https://github.com/SimenB))
 * [`cf09e75`](https://github.com/npm/npm/commit/cf09e754931739af32647d667b671e72a4c79081)
-
   [#9022](https://github.com/npm/npm/issues/9022) Document the `"access"` field
   in `"publishConfig"`. Did you know you don't need to use `--access=public`
   when publishing scoped packages?! Just put it in your `package.json`!
   Go refresh yourself on scopes packages by [checking our docs](https://docs.npmjs.com/getting-started/scoped-packages) on them.
-
   ([@boennemann](https://github.com/boennemann))
 * [`bfd73da`](https://github.com/npm/npm/commit/bfd73da33349cc2afb8278953b2ae16ea95023de)
   [#9013](https://github.com/npm/npm/issues/9013) fixed typo in changelog
