@@ -45,7 +45,6 @@ test('installing a package that depends on the current package', function (t) {
     function (err, code, stdout, stderr) {
       t.ifError(err, 'npm ran without issue')
       t.notOk(code, 'npm ran without raising an error code')
-      t.notOk(stderr, 'no error output')
 
       common.npm(
         [

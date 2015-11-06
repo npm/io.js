@@ -54,7 +54,6 @@ test('npm install', function (t) {
   ], EXEC_OPTS, function (err, code, stdout, stderr) {
     t.ifErr(err, 'install finished successfully')
     t.notOk(code, 'exit ok')
-    t.notOk(stderr, 'Should not get data on stderr: ' + stderr)
     t.end()
   })
 })
