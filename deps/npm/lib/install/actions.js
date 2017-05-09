@@ -24,9 +24,9 @@ actions.prepare = require('./action/prepare.js')
 actions.finalize = require('./action/finalize.js')
 actions.remove = require('./action/remove.js')
 actions.move = require('./action/move.js')
-actions['update-linked'] = require('./action/update-linked.js')
 actions['global-install'] = require('./action/global-install.js')
 actions['global-link'] = require('./action/global-link.js')
+actions['refresh-package-json'] = require('./action/refresh-package-json.js')
 
 // FIXME: We wrap actions like three ways to sunday here.
 // Rewrite this to only work one way.
@@ -58,7 +58,9 @@ Object.keys(actions).forEach(function (actionName) {
       }
     }
     function thenRunAction () {
-      action(staging, pkg, log, andDone(next))
+      var done = andDone(next)
+      var result = action(staging, pkg, log, done)
+      if (result && result.then) result.then(() => done(), done)
     }
     function andDone (cb) {
       return andFinishTracker(log, andAddParentToErrors(pkg.parent, andHandleOptionalDepErrors(pkg, cb)))
@@ -70,7 +72,7 @@ function markAsFailed (pkg) {
   pkg.failed = true
   pkg.requires.forEach(function (req) {
     req.requiredBy = req.requiredBy.filter(function (reqReqBy) { return reqReqBy !== pkg })
-    if (req.requiredBy.length === 0 && !req.userRequired && !req.existing) {
+    if (req.requiredBy.length === 0 && !req.userRequired) {
       markAsFailed(req)
     }
   })
@@ -117,12 +119,23 @@ exports.doOne = function (cmd, staging, pkg, log, next) {
   execAction(prepareAction(staging, log)([cmd, pkg]), next)
 }
 
+function time (log) {
+  process.emit('time', 'action:' + log.name)
+}
+function timeEnd (log) {
+  process.emit('timeEnd', 'action:' + log.name)
+}
+
 exports.doSerial = function (type, staging, actionsToRun, log, next) {
   validate('SSAOF', arguments)
   actionsToRun = actionsToRun
     .filter(function (value) { return value[0] === type })
   log.silly('doSerial', '%s %d', type, actionsToRun.length)
-  chain(actionsToRun.map(prepareAction(staging, log)), andFinishTracker(log, next))
+  time(log)
+  chain(actionsToRun.map(prepareAction(staging, log)), andFinishTracker(log, function () {
+    timeEnd(log)
+    next.apply(null, arguments)
+  }))
 }
 
 exports.doReverseSerial = function (type, staging, actionsToRun, log, next) {
@@ -131,13 +144,21 @@ exports.doReverseSerial = function (type, staging, actionsToRun, log, next) {
     .filter(function (value) { return value[0] === type })
     .reverse()
   log.silly('doReverseSerial', '%s %d', type, actionsToRun.length)
-  chain(actionsToRun.map(prepareAction(staging, log)), andFinishTracker(log, next))
+  time(log)
+  chain(actionsToRun.map(prepareAction(staging, log)), andFinishTracker(log, function () {
+    timeEnd(log)
+    next.apply(null, arguments)
+  }))
 }
 
 exports.doParallel = function (type, staging, actionsToRun, log, next) {
   validate('SSAOF', arguments)
   actionsToRun = actionsToRun.filter(function (value) { return value[0] === type })
   log.silly('doParallel', type + ' ' + actionsToRun.length)
+  time(log)
 
-  asyncMap(actionsToRun.map(prepareAction(staging, log)), execAction, andFinishTracker(log, next))
+  asyncMap(actionsToRun.map(prepareAction(staging, log)), execAction, andFinishTracker(log, function () {
+    timeEnd(log)
+    next.apply(null, arguments)
+  }))
 }

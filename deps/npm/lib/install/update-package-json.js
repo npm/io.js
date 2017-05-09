@@ -20,20 +20,24 @@ module.exports = function (mod, buildpath, next) {
   pkg._requiredBy =
     mod.requiredBy
       .map(function (req) {
-        if (req.package.devDependencies[name] && !req.package.dependencies[name]) {
+        if (
+          req.package.devDependencies &&
+          req.package.devDependencies[name] &&
+          !req.package.dependencies[name]
+        ) {
           return '#DEV:' + req.location
         } else {
           return req.location
         }
       })
       .concat(mod.userRequired ? ['#USER'] : [])
-      .concat(mod.existing ? ['#EXISTING'] : [])
       .sort()
   pkg._location = mod.location
   pkg._phantomChildren = {}
   Object.keys(mod.phantomChildren).sort().forEach(function (name) {
     pkg._phantomChildren[name] = mod.phantomChildren[name].package.version
   })
+  pkg._inBundle = !!mod.fromBundle
 
   // sort keys that are known safe to sort to produce more consistent output
   sortKeys.forEach(function (key) {
