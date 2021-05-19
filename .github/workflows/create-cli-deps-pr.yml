@@ -1,20 +1,30 @@
-name: Create CLI Deps PR
+name: 'CLI Dependency Update'
 
-# Controls when the action will run. 
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  create-pull-request:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    env:
+      GITHUB_TOKEN: ${{ secrets.NPM_ROBOT_TOKEN }}
+      REPO: ${{ github.repository }}
     steps:
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Checkout npm/node
+        uses: actions/checkout@v2
+        with: 
+          fetch-depth: 0
+          ref: master
+          repository: ${{ github.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run dependency updates and create PR
         run: |
-          git config -l
+          npm_version=`npm view npm@latest version`
+          release_branch_name="npm-$npm_version"
+          git config user.name "npm-robot"
+          git config user.email "ops+robot@npmjs.com"
+          git checkout -b "$release_branch_name"
+          ./tools/update-npm.sh "$npm_version"
+          git push origin "$release_branch_name"
+          gh_release_body=`gh release view -R npm/cli`
+          gh pr create -R "npm/node" -B "master" -H "npm:$release_branch_name" --title "deps(cli): upgrade npm to $npm_version" --body "$gh_release_body"
