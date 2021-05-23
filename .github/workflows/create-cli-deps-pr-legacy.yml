@@ -14,14 +14,14 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.NPM_ROBOT_TOKEN }}
       NPM_VERSION: ${{ github.event.inputs.npmVersion }}
-      REPO: 'nodejs/node'
+      REPO: 'npm/node'
     steps:
       - name: Checkout npm/node
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
           ref: master
-          repository: 'nodejs/node'
+          repository: 'npm/node'
           token: ${{ secrets.NPM_ROBOT_TOKEN }}
       - name: Run dependency updates and create PR
         run: |
