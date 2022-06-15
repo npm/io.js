@@ -1,5 +1,5 @@
 {
-  "version": "8.12.1",
+  "version": "8.12.2",
   "name": "npm",
   "description": "a package manager for JavaScript",
   "workspaces": [
@@ -65,7 +65,7 @@
     "@npmcli/run-script": "^3.0.1",
     "abbrev": "~1.1.1",
     "archy": "~1.0.0",
-    "cacache": "^16.1.0",
+    "cacache": "^16.1.1",
     "chalk": "^4.1.2",
     "chownr": "^2.0.0",
     "cli-columns": "^4.0.0",
@@ -90,7 +90,7 @@
     "libnpmsearch": "^5.0.2",
     "libnpmteam": "^4.0.2",
     "libnpmversion": "^3.0.1",
-    "make-fetch-happen": "^10.1.6",
+    "make-fetch-happen": "^10.1.7",
     "minipass": "^3.1.6",
     "minipass-pipeline": "^1.2.4",
     "mkdirp": "^1.0.4",
